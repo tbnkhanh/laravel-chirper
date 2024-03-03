@@ -11,11 +11,13 @@ class HomeController extends Controller
     public function index()
     {
         if (Auth::id()) {
-            $userType = Auth()->user()->usertype;
+            $userType = Auth()->user()->user_type;
             if ($userType == 'user') {
                 return view('dashboard');
             } else if ($userType == 'admin') {
-                return view('admin.admin');
+                return view('admin.dashboard');
+            } else if ($userType == 'player') {
+                return view('player.dashboard');
             } else {
                 return redirect()->back();
             }

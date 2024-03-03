@@ -15,7 +15,7 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @if (Auth::user()->usertype == 'admin')
+                    @if (Auth::user()->user_type == 'admin')
                         <x-nav-link :href="route('chirps.index')" :active="request()->routeIs('chirps.index')">
                             {{ __('Chirps') }}
                         </x-nav-link>
