@@ -30,9 +30,9 @@
             <div style="text-align: center; font-size: 25px">
                 <b>All Team</b>
             </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-5">
                 <div class="p-6 text-gray-900">
-                    @if (count($teams) === 0)
+                    @if (count($teamsWithPlayers) === 0)
                         <div>There are currently no teams added</div>
                     @endif
 
@@ -41,30 +41,27 @@
                             data-mdb-ripple-init>Add Team</a>
                     @endif
 
-                    @foreach ($teams as $team)
+                    @foreach ($teamsWithPlayers as $team)
                         <h1 style="text-align: center; font-size: 20px">{{ $team->team_name }}</h1>
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
+                                    <th scope="col">Player_ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">In Game Name</th>
+                                    <th scope="col">Email</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($team->players as $player)
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
+                                    <th scope="row">{{$player->id}}</th>
+                                    <td>{{$player->user['name']}}</td>
+                                    <td>{{$player->in_game_name}}</td>
+                                    <td>{{$player->user['email']}}</td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
+                                @endforeach
+                               
                             </tbody>
                         </table>
                     @endforeach

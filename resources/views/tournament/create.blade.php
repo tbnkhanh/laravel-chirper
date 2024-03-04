@@ -24,12 +24,12 @@
 
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label for="birthday">Start date:</label>
-                            <input type="date" id="birthday" name="start_date">
+                            <input type="date" id="birthday" name="start_date" style="width: 100%;">
                         </div>
 
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label for="birthday" style="margin-right:6px">End date:</label>
-                            <input type="date" id="birthday" name="end_date">         
+                            <input type="date" id="birthday" name="end_date" style="width: 100%;">         
                         </div>
 
                         <!-- Submit button -->

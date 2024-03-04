@@ -10,8 +10,8 @@ class Team extends Model
     use HasFactory;
     protected $primaryKey = 'id';
 
-    // public function players()
-    // {
-    //     return $this->hasMany(Player::class, 'team_id', 'team_id');
-    // }
+    public function players()
+    {
+        return $this->hasMany(Player::class);
+    }
 }

@@ -58,21 +58,12 @@ class TournamentController extends Controller
     public function show($id)
     {
         $tournament = Tournament::find($id);
-        // $teams= Team::where('tournament_id',$id) -> get();
-        // $teams = Team::where('tournament_id', $id)->with('players.users')->get();
-        $teamsAndPlayers = DB::table('teams')
-            ->join('players', 'teams.id', '=', 'players.team_id')
-            ->join('users', 'players.user_id', '=', 'users.id')
-            ->select(
-                'teams.id',
-                'teams.team_name',
-                'users.name',
-                'users.user_type',
-            )
-            ->where('teams.tournament_id', $id)
+        $teamsWithPlayers = Team::with('players.user')
+            ->where('tournament_id', $id)
             ->get();
-        dd($teamsAndPlayers);
-        // return view('tournament.detail', compact('tournament','teams'));
+            // ->toArray();
+        // dd($teamsWithPlayers);
+        return view('tournament.detail', compact('tournament','teamsWithPlayers'));
     }
 
     /**

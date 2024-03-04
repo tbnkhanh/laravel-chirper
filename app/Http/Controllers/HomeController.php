@@ -18,9 +18,7 @@ class HomeController extends Controller
                 return view('admin.dashboard');
             } else if ($userType == 'player') {
                 return view('player.dashboard');
-            } else {
-                return redirect()->back();
-            }
+            } 
         }
     }
 }
