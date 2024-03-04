@@ -42,13 +42,19 @@ class TournamentController extends Controller
             'end_date' => 'required|string',
         ]);
 
-        $tournament = new Tournament();
-        $tournament->user_id = Auth::id();
-        $tournament->tournament_name = $request->input('tournament_name');
-        $tournament->tournament_description = $request->input('tournament_description');
-        $tournament->start_date = $request->input('start_date');
-        $tournament->end_date = $request->input('end_date');
-        $tournament->save();
+        // $tournament = new Tournament();
+        // $tournament->user_id = Auth::id();
+        // $tournament->tournament_name = $request->input('tournament_name');
+        // $tournament->tournament_description = $request->input('tournament_description');
+        // $tournament->start_date = $request->input('start_date');
+        // $tournament->end_date = $request->input('end_date');
+        $tournament = Tournament::create([
+            'user_id' => Auth::id(),
+            'tournament_name' => $data['tournament_name'],
+            'tournament_description' => $data['tournament_description'],
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+        ]);
         return redirect('/tournament/index');
     }
 
