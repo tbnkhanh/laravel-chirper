@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('matches', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tournament_id')->constrained("tournaments")->cascadeOnDelete();
-            $table->int('round_number');
-            $table->int('match_number');
+            $table->integer('round_number');
+            $table->integer('match_number');
             $table->foreignId('team1_id')->constrained("teams")->cascadeOnDelete();
             $table->foreignId('team2_id')->constrained("teams")->cascadeOnDelete();
             $table->foreignId('winner_team_id')->constrained("teams")->cascadeOnDelete();

@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Team;
 use App\Models\Tournament;
+use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon as SupportCarbon;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TournamentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        $tournaments = DB::table("tournaments")->get();
+        return view('tournament.index', compact('tournaments'));
     }
 
     /**
@@ -20,7 +28,6 @@ class TournamentController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -28,38 +35,82 @@ class TournamentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'tournament_name' => 'required|string|min:3',
+            'tournament_description' => 'required|string',
+            'start_date' => 'required|string',
+            'end_date' => 'required|string',
+        ]);
+
+        $tournament = new Tournament();
+        $tournament->user_id = Auth::id();
+        $tournament->tournament_name = $request->input('tournament_name');
+        $tournament->tournament_description = $request->input('tournament_description');
+        $tournament->start_date = $request->input('start_date');
+        $tournament->end_date = $request->input('end_date');
+        $tournament->save();
+        return redirect('/tournament/index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Tournament $tournament)
+    public function show($id)
     {
-        //
+        $tournament = Tournament::find($id);
+        // $teams= Team::where('tournament_id',$id) -> get();
+        // $teams = Team::where('tournament_id', $id)->with('players.users')->get();
+        $teamsAndPlayers = DB::table('teams')
+            ->join('players', 'teams.id', '=', 'players.team_id')
+            ->join('users', 'players.user_id', '=', 'users.id')
+            ->select(
+                'teams.id',
+                'teams.team_name',
+                'users.name',
+                'users.user_type',
+            )
+            ->where('teams.tournament_id', $id)
+            ->get();
+        dd($teamsAndPlayers);
+        // return view('tournament.detail', compact('tournament','teams'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tournament $tournament)
+    public function edit($id)
     {
-        //
+        $tournament = Tournament::find($id);
+        // $start_date = Carbon::parse($tournament->start_date);
+        // $end_date = Carbon::parse($tournament->end_date);
+        // $tournament->start_date = $start_date->toDateString();
+        // $tournament->end_date = $end_date->toDateString();
+        // dd($tournament);
+        return view('tournament.edit', compact('tournament'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tournament $tournament)
+    public function update($id, Request $request): RedirectResponse
     {
-        //
+        $data = $request->validate([
+            'tournament_name' => 'required|string|min:3',
+            'tournament_description' => 'required|string',
+            'start_date' => 'required',
+            'end_date' => 'required'
+        ]);
+        $tournament = Tournament::find($id);
+        $tournament->update($data);
+        return redirect(route('tournament.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tournament $tournament)
+    public function destroy($id)
     {
-        //
+        DB::table('tournaments')->where('id', $id)->delete();
+        return redirect(route('tournament.index'));
     }
 }

@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('tournament.index')" :active="request()->routeIs('tournament.index')">
+                        {{ __('Tournament') }}
+                    </x-nav-link>
                     @if (Auth::user()->user_type == 'admin')
                         <x-nav-link :href="route('chirps.index')" :active="request()->routeIs('chirps.index')">
                             {{ __('Chirps') }}
