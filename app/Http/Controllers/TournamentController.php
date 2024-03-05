@@ -57,7 +57,6 @@ class TournamentController extends Controller
         ]);
         return redirect('/tournament/index');
     }
-
     /**
      * Display the specified resource.
      */

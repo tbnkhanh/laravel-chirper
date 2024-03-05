@@ -9,7 +9,10 @@ class Team extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-
+    protected $fillable = [
+        'team_name',
+        'tournament_id'
+    ];
     public function players()
     {
         return $this->hasMany(Player::class);

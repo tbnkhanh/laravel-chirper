@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TournamentController;
+use App\Http\Controllers\TeamController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,6 +36,15 @@ Route::middleware('auth')->prefix("tournament")->group(function () {
         Route::delete('/delete/{id}', [TournamentController::class, 'destroy'])->name('tournament.destroy');
     });
 });
+
+Route::middleware(['auth', 'admin'])->prefix("team")->group(function () {
+        Route::get('/create/{id}', [TeamController::class, 'create'])->name('team.create');
+        Route::post('/store/{id}', [TeamController::class, 'store'])->name('team.store');
+        Route::get('/edit/{team}', [TeamController::class, 'edit'])->name('team.edit');
+        Route::post('/update/{id}', [TeamController::class, 'update'])->name('team.update');
+        Route::delete('/delete/{tournamentId}/{teamId}', [TeamController::class, 'destroy'])->name('team.destroy');
+});
+
 
 Route::resource('chirps', ChirpController::class)
     ->only(['index', 'store', 'edit', 'update', 'destroy'])
