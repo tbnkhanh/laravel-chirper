@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form action="{{ route('team.store', $tournament_id) }}" method="post"
+                    <form action="{{ route('team.store', $tournament->id) }}" method="post"
                         style="width: 26rem; margin:auto">
                         @csrf
                         <div data-mdb-input-init class="form-outline mb-4">
@@ -22,47 +22,33 @@
                             @endif
                         </div>
 
-                        <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="form4Example1">Player1 Email</label>
-                            <input type="text" id="form4Example1" class="form-control" name="player1_email" />
-                            @if ($errors->has('player1_email'))
-                                <p class="text-danger">
-                                    {{ $errors->first('player1_email') }}
-                                </p>
-                            @endif
-                        </div>
+                        @for ($i = 1; $i <= $tournament->team_size; $i++)
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <label class="form-label"
+                                    for="player_email{{ $i }}">Player{{ $i }} Email</label>
+                                <input type="text" id="player_email{{ $i }}" class="form-control"
+                                    name="player_email[{{ $i }}]" />
+                                @if ($errors->has('player_email.' . $i))
+                                    <p class="text-danger">
+                                        {{ $errors->first('player_email.' . $i) }}
+                                    </p>
+                                @endif
+                            </div>
 
-                        <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="form4Example1">Player1 In Game Name</label>
-                            <input type="text" id="form4Example1" class="form-control" name="in_game1" />
-                            @if ($errors->has('in_game1'))
-                                <p class="text-danger">
-                                    {{ $errors->first('in_game1') }}
-                                </p>
-                            @endif
-                        </div>
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <label class="form-label" for="in_game{{ $i }}">Player{{ $i }}
+                                    Name In Game </label>
+                                <input type="text" id="in_game{{ $i }}" class="form-control"
+                                    name="in_game[{{ $i }}]" />
+                                @if ($errors->has('in_game.' . $i))
+                                    <p class="text-danger">
+                                        {{ $errors->first('in_game.' . $i) }}
+                                    </p>
+                                @endif
+                            </div>
+                        @endfor
 
-                        <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="form4Example1">Player2 Email</label>
-                            <input type="text" id="form4Example1" class="form-control" name="player2_email" />
-                            @if ($errors->has('player2_email'))
-                                <p class="text-danger">
-                                    {{ $errors->first('player2_email') }}
-                                </p>
-                            @endif
-                        </div>
-
-                        <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="form4Example1">Player1 In Game Name</label>
-                            <input type="text" id="form4Example1" class="form-control" name="in_game2" />
-                            @if ($errors->has('in_game2'))
-                                <p class="text-danger">
-                                    {{ $errors->first('in_game2') }}
-                                </p>
-                            @endif
-                        </div>
-
-                        @foreach (['duplicate_email', 'users_in_other_team', 'email1_invalid', 'email2_invalid'] as $error)
+                        @foreach (['email_duplicate', 'users_in_other_team', 'email_invalid'] as $error)
                             @if ($errors->has($error))
                                 <p class="text-danger mb-2">{{ $errors->first($error) }}</p>
                             @endif

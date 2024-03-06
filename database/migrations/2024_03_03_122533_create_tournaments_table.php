@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained("users")->cascadeOnDelete();
             $table->string('tournament_name');
             $table->string('tournament_description');
+            $table->string('game_played');
+            $table->integer('team_size');
             $table->timestamp('start_date')->nullable()->default(null);
             $table->timestamp('end_date')->nullable()->default(null);
             $table->timestamps();

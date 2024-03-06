@@ -15,10 +15,22 @@
                     <div class="card text-center mb-2">
                         <div class="card-header">Tournament name: {{ $tournament->tournament_name }}</div>
                         <div class="card-body">
-                            <h5 class="card-title">Tournament Description:</h5>
-                            <p class="card-text"> {{ $tournament->tournament_description }} </p>
-                            <h5 class="card-title mt-3">Tournament Time:</h5>
-                            <p class="card-text">{{ $tournament->start_date }} - {{ $tournament->end_date }}</p>
+                            <div>
+                                <b class="card-title">Tournament Description:</b>
+                                <p class="card-text"> {{ $tournament->tournament_description }} </p>
+                            </div>
+                            <div class='mt-2'>
+                                <b class="card-title ">Game Played:</b>
+                                <p class="card-text">{{ $tournament->game_played }}</p>
+                            </div>
+                            <div class='mt-2'>
+                                <b class="card-title ">Team Size</b>
+                                <p class="card-text">{{ $tournament->team_size }}</p>
+                            </div>
+                            <div class='mt-2'>
+                                <b class="card-title ">Tournament Time:</b>
+                                <p class="card-text">Start: {{ $tournament->start_date }} - End: {{ $tournament->end_date }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -49,10 +61,8 @@
                                 <a href="{{ route('team.edit', $team) }}" class="btn btn-warning "
                                     data-mdb-ripple-init>Edit Team</a>
                                 <button class="btn btn-danger" id="btn-delete" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal"
-                                    data-team-name="{{ $team->team_name }}"
-                                    data-team-id="{{ $team->id }}"
-                                    data-tournament-id="{{ $tournament->id }}">
+                                    data-bs-target="#exampleModal" data-team-name="{{ $team->team_name }}"
+                                    data-team-id="{{ $team->id }}" data-tournament-id="{{ $tournament->id }}">
                                     Delete Team
                                 </button>
                             @endif

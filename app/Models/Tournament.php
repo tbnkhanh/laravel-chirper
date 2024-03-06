@@ -12,6 +12,8 @@ class Tournament extends Model
         'user_id',
         'tournament_name',
         'tournament_description',
+        'game_played',
+        'team_size',
         'start_date',
         'end_date',
     ];

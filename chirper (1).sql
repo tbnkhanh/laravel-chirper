@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 05, 2024 at 10:47 AM
+-- Generation Time: Mar 06, 2024 at 11:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -157,8 +157,9 @@ INSERT INTO `players` (`id`, `user_id`, `team_id`, `in_game_name`, `created_at`,
 (2, 4, 2, 'gohan', '2024-03-04 10:16:42', '2024-03-04 10:16:42'),
 (3, 5, 1, 'cadic', '2024-03-05 01:34:34', '2024-03-05 01:34:34'),
 (4, 6, 2, 'mabu', '2024-03-04 21:32:52', '2024-03-04 21:32:52'),
-(16, 7, 22, 'kaisa', '2024-03-05 09:15:42', '2024-03-05 09:15:42'),
-(17, 8, 22, 'darius', '2024-03-05 09:15:42', '2024-03-05 09:15:42');
+(22, 7, 26, 'goku', '2024-03-06 10:03:13', '2024-03-06 10:03:13'),
+(23, 8, 26, 'cadic', '2024-03-06 10:03:13', '2024-03-06 10:03:13'),
+(24, 9, 26, 'ba', '2024-03-06 10:03:13', '2024-03-06 10:03:13');
 
 -- --------------------------------------------------------
 
@@ -182,7 +183,7 @@ INSERT INTO `teams` (`id`, `team_name`, `tournament_id`, `created_at`, `updated_
 (1, 'Team SAD', 1, '2024-03-04 08:52:32', '2024-03-04 08:52:32'),
 (2, 'Team KNA', 1, '2024-03-04 09:20:41', '2024-03-04 09:20:41'),
 (3, 'Team PTIT', 2, '2024-03-04 09:21:20', '2024-03-04 09:21:20'),
-(22, 'Team PTIT', 1, '2024-03-05 02:15:42', '2024-03-05 02:15:42');
+(26, 'sad', 1, '2024-03-06 03:03:13', '2024-03-06 03:03:13');
 
 -- --------------------------------------------------------
 
@@ -195,19 +196,21 @@ CREATE TABLE `tournaments` (
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `tournament_name` varchar(255) NOT NULL,
   `tournament_description` varchar(255) NOT NULL,
-  `start_date` date DEFAULT '2024-03-04',
-  `end_date` date DEFAULT '2024-03-04',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `game_played` varchar(255) NOT NULL,
+  `team_size` varchar(11) NOT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `tournaments`
 --
 
-INSERT INTO `tournaments` (`id`, `user_id`, `tournament_name`, `tournament_description`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
-(1, 2, 'League of Legends World Championship', 'This tournament is about League of Legends, this is the World Championship', '2024-03-07', '2024-03-13', '2024-03-03 03:16:10', '2024-03-05 02:39:13'),
-(2, 2, 'CS:GO World Championship', 'Description about CS:GO World Championship', '2024-03-06', '2024-03-07', '2024-03-04 01:32:33', '2024-03-04 18:39:59');
+INSERT INTO `tournaments` (`id`, `user_id`, `tournament_name`, `tournament_description`, `game_played`, `team_size`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, 2, 'League of Legends World Championship', 'This tournament is about League of Legends, this is the World Championship', 'FIFA', '2', '2024-03-07', '2024-03-13', '2024-03-03 03:16:10', '2024-03-06 03:15:05'),
+(2, 2, 'CS:GO World Championship', 'Description about CS:GO World Championship', 'CS:GO', '3', '2024-03-06', '2024-03-07', '2024-03-04 01:32:33', '2024-03-06 03:14:04');
 
 -- --------------------------------------------------------
 
@@ -239,7 +242,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `us
 (5, 'Hoang', 'player2@gmail.com', NULL, '$2y$12$ej/1e4bJv1WrIG85nuONvuX9Lq/f4Q3xeip0pvYm4eo.bjK..iPNe', 'player', NULL, '2024-03-04 03:08:54', '2024-03-04 03:08:54'),
 (6, 'Long', 'player3@gmail.com', NULL, '$2y$12$F/QhhtKmEaqkzbq7/BSvMOthQycuKVtbbQCp.rPfzcHvP2h054mzi', 'player', NULL, '2024-03-04 18:37:14', '2024-03-04 18:37:14'),
 (7, 'Thanh', 'player4@gmail.com', NULL, '$2y$12$0sBRdDfYZejuiddXSHTuV.99d86JD3WNzzGHKX7KKsIVCziuxzBmS', 'player', NULL, '2024-03-04 18:38:01', '2024-03-04 18:38:01'),
-(8, 'Vuong', 'player5@gmail.com', NULL, '$2y$12$WtIH86wIRvPmxFz/Pj3EmOgad2fItm02jXQ3NA9q.nFRGasASk/r.', 'player', NULL, '2024-03-04 20:19:42', '2024-03-04 20:19:42');
+(8, 'Vuong', 'player5@gmail.com', NULL, '$2y$12$WtIH86wIRvPmxFz/Pj3EmOgad2fItm02jXQ3NA9q.nFRGasASk/r.', 'player', NULL, '2024-03-04 20:19:42', '2024-03-04 20:19:42'),
+(9, 'Khai', 'player6@gmail.com', NULL, '$2y$12$IthKHbiBBQmrI/xLMyoFxuCm7sguCpjgQEFPtK2rVA0AwEDXXrEyu', 'player', NULL, '2024-03-06 03:02:01', '2024-03-06 03:02:01');
 
 --
 -- Indexes for dumped tables
@@ -356,25 +360,25 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `players`
 --
 ALTER TABLE `players`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `teams`
 --
 ALTER TABLE `teams`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `tournaments`
 --
 ALTER TABLE `tournaments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
