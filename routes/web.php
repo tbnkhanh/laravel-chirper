@@ -38,13 +38,16 @@ Route::middleware('auth')->prefix("tournament")->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->prefix("team")->group(function () {
-        Route::get('/create/{id}', [TeamController::class, 'create'])->name('team.create');
-        Route::post('/store/{id}', [TeamController::class, 'store'])->name('team.store');
-        Route::get('/edit/{team}', [TeamController::class, 'edit'])->name('team.edit');
-        Route::post('/update/{id}', [TeamController::class, 'update'])->name('team.update');
-        Route::delete('/delete/{tournamentId}/{teamId}', [TeamController::class, 'destroy'])->name('team.destroy');
+    Route::get('/create/{id}', [TeamController::class, 'create'])->name('team.create');
+    Route::post('/store/{id}', [TeamController::class, 'store'])->name('team.store');
+    Route::get('/edit/{team}', [TeamController::class, 'edit'])->name('team.edit');
+    Route::post('/update/{tournamentId}/{teamId}', [TeamController::class, 'update'])->name('team.update');
+    Route::delete('/delete/{tournamentId}/{teamId}', [TeamController::class, 'destroy'])->name('team.destroy');
 });
 
+Route::middleware(['auth'])->prefix("match")->group(function () {
+    Route::get('/match/{id}', [TeamController::class, 'create'])->name('team.create');
+});
 
 Route::resource('chirps', ChirpController::class)
     ->only(['index', 'store', 'edit', 'update', 'destroy'])

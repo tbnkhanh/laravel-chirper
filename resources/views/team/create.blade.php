@@ -48,7 +48,7 @@
                             </div>
                         @endfor
 
-                        @foreach (['email_duplicate', 'users_in_other_team', 'email_invalid'] as $error)
+                        @foreach (['email_duplicate', 'users_in_other_team', 'email_invalid','email_not_exist'] as $error)
                             @if ($errors->has($error))
                                 <p class="text-danger mb-2">{{ $errors->first($error) }}</p>
                             @endif

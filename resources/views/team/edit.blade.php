@@ -9,8 +9,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form action="{{ route('team.update', $teamsWithPlayers->id) }}" method="post"
-                        style="width: 26rem; margin:auto">
+                    <form action="{{ route('team.update', [$teamsWithPlayers->tournament_id, $teamsWithPlayers->id]) }}"
+                        method="post" style="width: 26rem; margin:auto">
                         @csrf
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="form4Example1">Team Name</label>
@@ -28,19 +28,20 @@
                                 <label class="form-label"
                                     for="player_email{{ $i }}">Player{{ $i }} Email</label>
                                 <input type="text" id="player_email{{ $i }}" class="form-control"
-                                    name="player_email[{{ $i }}]" value="{{ $teamsWithPlayers->players[$i-1]->user['email'] }}"/>
+                                    name="player_email[{{ $i }}]"
+                                    value="{{ $teamsWithPlayers->players[$i - 1]->user['email'] }}">
                                 @if ($errors->has('player_email.' . $i))
                                     <p class="text-danger">
                                         {{ $errors->first('player_email.' . $i) }}
                                     </p>
                                 @endif
                             </div>
-
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <label class="form-label" for="in_game{{ $i }}">Player{{ $i }}
                                     Name In Game </label>
                                 <input type="text" id="in_game{{ $i }}" class="form-control"
-                                    name="in_game[{{ $i }}]" value="{{ $teamsWithPlayers->players[$i-1]->in_game_name }}"/>
+                                    name="in_game[{{ $i }}]"
+                                    value="{{ $teamsWithPlayers->players[$i - 1]->in_game_name }}">
                                 @if ($errors->has('in_game.' . $i))
                                     <p class="text-danger">
                                         {{ $errors->first('in_game.' . $i) }}
@@ -50,15 +51,14 @@
                         @endfor
 
 
-                        @foreach (['duplicate_email', 'users_in_other_team', 'email1_invalid', 'email2_invalid'] as $error)
+                        @foreach (['email_duplicate', 'users_in_other_team', 'email_invalid', 'email_not_exist'] as $error)
                             @if ($errors->has($error))
                                 <p class="text-danger mb-2">{{ $errors->first($error) }}</p>
                             @endif
                         @endforeach
 
                         <div style="text-align: center;">
-                            <button data-mdb-ripple-init class="btn btn-warning btn-block mb-4">Save Infor
-                                Team</button>
+                            <button data-mdb-ripple-init class="btn btn-warning btn-block mb-4">Save Infor Team</button>
                         </div>
                     </form>
 

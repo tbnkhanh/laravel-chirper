@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 06, 2024 at 11:29 AM
+-- Generation Time: Mar 07, 2024 at 11:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `chirper`
+-- Database: `tournament`
 --
 
 -- --------------------------------------------------------
@@ -70,12 +70,23 @@ CREATE TABLE `matches` (
   `tournament_id` bigint(20) UNSIGNED NOT NULL,
   `round_number` int(11) NOT NULL,
   `match_number` int(11) NOT NULL,
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
   `team1_id` bigint(20) UNSIGNED NOT NULL,
   `team2_id` bigint(20) UNSIGNED NOT NULL,
   `winner_team_id` bigint(20) UNSIGNED NOT NULL,
+  `status` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `matches`
+--
+
+INSERT INTO `matches` (`id`, `tournament_id`, `round_number`, `match_number`, `start_date`, `end_date`, `team1_id`, `team2_id`, `winner_team_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, '2024-03-07 15:00:00', '2024-03-07 17:00:00', 1, 2, 1, 'Finish', '2024-03-07 08:12:11', '2024-03-07 08:12:11'),
+(2, 1, 1, 2, '2024-03-07 16:00:00', '2024-03-07 17:00:00', 3, 4, 3, 'Finish', '2024-03-07 09:29:19', '2024-03-07 09:29:19');
 
 -- --------------------------------------------------------
 
@@ -153,13 +164,14 @@ CREATE TABLE `players` (
 --
 
 INSERT INTO `players` (`id`, `user_id`, `team_id`, `in_game_name`, `created_at`, `updated_at`) VALUES
-(1, 3, 1, 'songoku\r\n', '2024-03-04 09:12:07', '2024-03-04 09:12:07'),
-(2, 4, 2, 'gohan', '2024-03-04 10:16:42', '2024-03-04 10:16:42'),
-(3, 5, 1, 'cadic', '2024-03-05 01:34:34', '2024-03-05 01:34:34'),
-(4, 6, 2, 'mabu', '2024-03-04 21:32:52', '2024-03-04 21:32:52'),
-(22, 7, 26, 'goku', '2024-03-06 10:03:13', '2024-03-06 10:03:13'),
-(23, 8, 26, 'cadic', '2024-03-06 10:03:13', '2024-03-06 10:03:13'),
-(24, 9, 26, 'ba', '2024-03-06 10:03:13', '2024-03-06 10:03:13');
+(2, 4, 1, 'gohan', '2024-03-04 10:16:42', '2024-03-06 23:44:52'),
+(36, 6, 2, 'darius', '2024-03-07 06:37:38', '2024-03-06 23:46:27'),
+(38, 5, 2, 'yasuo1', '2024-03-07 06:42:28', '2024-03-07 06:42:28'),
+(41, 7, 1, 'frieza', '2024-03-07 09:25:24', '2024-03-07 09:25:24'),
+(42, 8, 3, 'gano', '2024-03-07 09:25:54', '2024-03-07 09:25:54'),
+(43, 9, 3, 'bulk', '2024-03-07 09:25:54', '2024-03-07 09:25:54'),
+(44, 10, 4, 'mata', '2024-03-07 09:28:16', '2024-03-07 09:28:16'),
+(45, 11, 4, 'vladi', '2024-03-07 09:28:16', '2024-03-07 09:28:16');
 
 -- --------------------------------------------------------
 
@@ -180,10 +192,10 @@ CREATE TABLE `teams` (
 --
 
 INSERT INTO `teams` (`id`, `team_name`, `tournament_id`, `created_at`, `updated_at`) VALUES
-(1, 'Team SAD', 1, '2024-03-04 08:52:32', '2024-03-04 08:52:32'),
-(2, 'Team KNA', 1, '2024-03-04 09:20:41', '2024-03-04 09:20:41'),
-(3, 'Team PTIT', 2, '2024-03-04 09:21:20', '2024-03-04 09:21:20'),
-(26, 'sad', 1, '2024-03-06 03:03:13', '2024-03-06 03:03:13');
+(1, 'Team KNA', 1, '2024-03-04 09:20:41', '2024-03-04 09:20:41'),
+(2, 'Team PTIT', 1, '2024-03-06 23:37:38', '2024-03-06 23:37:38'),
+(3, 'Team JSA', 1, '2024-03-07 02:25:54', '2024-03-07 02:25:54'),
+(4, 'Team MAT', 1, '2024-03-07 02:28:16', '2024-03-07 02:28:16');
 
 -- --------------------------------------------------------
 
@@ -243,7 +255,9 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `us
 (6, 'Long', 'player3@gmail.com', NULL, '$2y$12$F/QhhtKmEaqkzbq7/BSvMOthQycuKVtbbQCp.rPfzcHvP2h054mzi', 'player', NULL, '2024-03-04 18:37:14', '2024-03-04 18:37:14'),
 (7, 'Thanh', 'player4@gmail.com', NULL, '$2y$12$0sBRdDfYZejuiddXSHTuV.99d86JD3WNzzGHKX7KKsIVCziuxzBmS', 'player', NULL, '2024-03-04 18:38:01', '2024-03-04 18:38:01'),
 (8, 'Vuong', 'player5@gmail.com', NULL, '$2y$12$WtIH86wIRvPmxFz/Pj3EmOgad2fItm02jXQ3NA9q.nFRGasASk/r.', 'player', NULL, '2024-03-04 20:19:42', '2024-03-04 20:19:42'),
-(9, 'Khai', 'player6@gmail.com', NULL, '$2y$12$IthKHbiBBQmrI/xLMyoFxuCm7sguCpjgQEFPtK2rVA0AwEDXXrEyu', 'player', NULL, '2024-03-06 03:02:01', '2024-03-06 03:02:01');
+(9, 'Khai', 'player6@gmail.com', NULL, '$2y$12$IthKHbiBBQmrI/xLMyoFxuCm7sguCpjgQEFPtK2rVA0AwEDXXrEyu', 'player', NULL, '2024-03-06 03:02:01', '2024-03-06 03:02:01'),
+(10, 'Dan', 'player7@gmail.com', NULL, '$2y$12$4REUlCSjpy4s68nYPLWbw..OOnmr/gOj9hPjII4CFseT9rzpIxq9O', 'player', NULL, '2024-03-07 02:26:48', '2024-03-07 02:26:48'),
+(11, 'Bao', 'player8@gmail.com', NULL, '$2y$12$wh.Yvrq3XAdKdS.xQdtWPem6qoOMfJup5UuLhP/b1/pR3T0M66bXu', 'player', NULL, '2024-03-07 02:27:15', '2024-03-07 02:27:15');
 
 --
 -- Indexes for dumped tables
@@ -268,9 +282,9 @@ ALTER TABLE `failed_jobs`
 --
 ALTER TABLE `matches`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `matches_tournament_id_foreign` (`tournament_id`),
   ADD KEY `matches_team1_id_foreign` (`team1_id`),
   ADD KEY `matches_team2_id_foreign` (`team2_id`),
+  ADD KEY `matches_tournament_id_foreign` (`tournament_id`),
   ADD KEY `matches_winner_team_id_foreign` (`winner_team_id`);
 
 --
@@ -342,7 +356,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `matches`
 --
 ALTER TABLE `matches`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -360,13 +374,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `players`
 --
 ALTER TABLE `players`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `teams`
 --
 ALTER TABLE `teams`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `tournaments`
@@ -378,7 +392,7 @@ ALTER TABLE `tournaments`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
@@ -394,10 +408,10 @@ ALTER TABLE `chirps`
 -- Constraints for table `matches`
 --
 ALTER TABLE `matches`
-  ADD CONSTRAINT `matches_team1_id_foreign` FOREIGN KEY (`team1_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `matches_team2_id_foreign` FOREIGN KEY (`team2_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `matches_tournament_id_foreign` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `matches_winner_team_id_foreign` FOREIGN KEY (`winner_team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `matches_team1_id_foreign` FOREIGN KEY (`team1_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `matches_team2_id_foreign` FOREIGN KEY (`team2_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `matches_tournament_id_foreign` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `matches_winner_team_id_foreign` FOREIGN KEY (`winner_team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `players`
