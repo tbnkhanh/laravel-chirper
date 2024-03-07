@@ -29,7 +29,8 @@
                             </div>
                             <div class='mt-2'>
                                 <b class="card-title ">Tournament Time:</b>
-                                <p class="card-text">Start: {{ $tournament->start_date }} - End: {{ $tournament->end_date }}</p>
+                                <p class="card-text">Start: {{ $tournament->start_date }} - End:
+                                    {{ $tournament->end_date }}</p>
                             </div>
                         </div>
                     </div>
@@ -96,6 +97,118 @@
         </div>
     </div>
 
+
+    <div class="py-2">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div style="text-align: center; font-size: 20px">
+                <b class="test">Tournament Bracket</b>
+            </div>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-5">
+                <div class="p-6 text-gray-900">
+                    <div class="theme theme-dark">
+                        <div class="bracket disable-image">
+
+                            <div class="column one">
+                                @foreach ($matches as $match)
+                                    <div class="match winner-top">
+                                        <div class="match-top team">
+                                            <span class="image"></span>
+                                            <span class="seed">{{ $match->team1_id }}</span>
+                                            <span class="name">Orlando Jetsetters</span>
+                                            <span class="score"></span>
+                                        </div>
+                                        <div class="match-bottom team">
+                                            <span class="image"></span>
+                                            <span class="seed">{{ $match->team2_id }}</span>
+                                            <span class="name">D.C. Senators</span>
+                                            <span class="score"></span>
+                                        </div>
+                                        <div class="match-lines">
+                                            <div class="line one"></div>
+                                            <div class="line two"></div>
+                                        </div>
+                                        <div class="match-lines alt">
+                                            <div class="line one"></div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            {{-- <div class="column two">
+                                <div class="match winner-bottom">
+                                    <div class="match-top team">
+                                        <span class="image"></span>
+                                        <span class="seed">1</span>
+                                        <span class="name">Orlando Jetsetters</span>
+                                        <span class="score">1</span>
+                                    </div>
+                                    <div class="match-bottom team">
+                                        <span class="image"></span>
+                                        <span class="seed">5</span>
+                                        <span class="name">West Virginia Runners</span>
+                                        <span class="score">2</span>
+                                    </div>
+                                    <div class="match-lines">
+                                        <div class="line one"></div>
+                                        <div class="line two"></div>
+                                    </div>
+                                    <div class="match-lines alt">
+                                        <div class="line one"></div>
+                                    </div>
+                                </div>
+                                <div class="match winner-bottom">
+                                    <div class="match-top team">
+                                        <span class="image"></span>
+                                        <span class="seed">2</span>
+                                        <span class="name">Denver Demon Horses</span>
+                                        <span class="score">1</span>
+                                    </div>
+                                    <div class="match-bottom team">
+                                        <span class="image"></span>
+                                        <span class="seed">3</span>
+                                        <span class="name">San Francisco Porters</span>
+                                        <span class="score">2</span>
+                                    </div>
+                                    <div class="match-lines">
+                                        <div class="line one"></div>
+                                        <div class="line two"></div>
+                                    </div>
+                                    <div class="match-lines alt">
+                                        <div class="line one"></div>
+                                    </div>
+                                </div>
+                            </div> --}}
+
+                            <div class="column three">
+                                <div class="match winner-top">
+                                    <div class="match-top team">
+                                        <span class="image"></span>
+                                        <span class="seed">5</span>
+                                        <span class="name">West Virginia Runners</span>
+                                        <span class="score">3</span>
+                                    </div>
+                                    <div class="match-bottom team">
+                                        <span class="image"></span>
+                                        <span class="seed">3</span>
+                                        <span class="name">San Francisco Porters</span>
+                                        <span class="score">2</span>
+                                    </div>
+                                    <div class="match-lines">
+                                        <div class="line one"></div>
+                                        <div class="line two"></div>
+                                    </div>
+                                    <div class="match-lines alt">
+                                        <div class="line one"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
 
 <!-- Modal -->

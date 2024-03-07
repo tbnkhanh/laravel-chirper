@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Matches;
 use App\Models\Team;
 use App\Models\Tournament;
 use Carbon\Carbon;
@@ -75,9 +76,12 @@ class TournamentController extends Controller
         $teamsWithPlayers = Team::with('players.user')
             ->where('tournament_id', $id)
             ->get();
-            // ->toArray();
-        // dd($teamsWithPlayers);
-        return view('tournament.detail', compact('tournament','teamsWithPlayers'));
+        // ->toArray();
+        $matches = Matches::with(['team1', 'team2', 'winnerTeam'])
+            ->where('tournament_id', $id)
+            ->get()->toArray();
+        dd($matches);
+        return view('tournament.detail', compact('tournament', 'teamsWithPlayers', 'matches'));
     }
 
     /**
