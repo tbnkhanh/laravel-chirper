@@ -55,7 +55,6 @@ class TournamentController extends Controller
         $tournament->end_date = $request->input('end_date');
         $tournament->save();
 
-        // dd($data['game_mode']);
         // $tournament = Tournament::create([
         //     'user_id' => Auth::id(),
         //     'tournament_name' => $data['tournament_name'],
@@ -74,13 +73,15 @@ class TournamentController extends Controller
     {
         $tournament = Tournament::find($id);
         $teamsWithPlayers = Team::with('players.user')
-            ->where('tournament_id', $id)
+            ->where('tournament_id', $id)   
             ->get();
         // ->toArray();
         $matches = Matches::with(['team1', 'team2', 'winnerTeam'])
-            ->where('tournament_id', $id)
-            ->get()->toArray();
-        dd($matches);
+        ->where('tournament_id', $id)
+        ->orderBy('round_number')
+        ->orderBy('match_number')
+        ->get();
+        // dd($matches); 
         return view('tournament.detail', compact('tournament', 'teamsWithPlayers', 'matches'));
     }
 

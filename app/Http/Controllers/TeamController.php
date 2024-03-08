@@ -110,14 +110,14 @@ class TeamController extends Controller
         $checkedEmails = [];
         $emailsNeedUpdate = [];
         $emailsNeedDelete = [];
-
+        
         $emailsCurrent = Team::with('players.user')
             ->where('id', $teamId)
             ->get()
             ->pluck('players.*.user.email')
             ->flatten()
             ->toArray();
-
+        
         foreach ($emailsRequest as $index => $email) {
             if ($email !== $emailsCurrent[$index - 1]) {
                 array_push($emailsNeedDelete, $emailsCurrent[$index - 1]);
@@ -152,7 +152,7 @@ class TeamController extends Controller
                         'email_duplicate' => "Email $email is duplicate"
                     ]);
                 }
-
+                
                 $user = User::where('email', $email)->first();
                 if (is_null($user)) {
                     throw ValidationException::withMessages([

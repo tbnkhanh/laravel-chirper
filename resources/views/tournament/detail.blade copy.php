@@ -105,10 +105,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-5">
                 <div class="p-6 text-gray-900">
                     <div style="text-align: center">
-                        <form action="{{ route('match.store', $tournament->id)}}" method="post">
-                            @csrf
-                            <button class="btn btn-success">Generate Bracket</button>
-                        </form>
+                        <button class="btn btn-success">Generate Bracket</button>
                     </div>
                 </div>
             </div>
@@ -124,86 +121,53 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-5">
                 <div class="p-6 text-gray-900">
                     <div class="theme theme-dark">
-
                         <div class="bracket disable-image">
                             @php
-                                $round = log($tournament->team_number, 2);
+                                $previousRoundNumber = null;
                             @endphp
 
-                            @for ($i = 1; $i <= $round; $i++)
-                                <div class="column">
-                                    @php
-                                        $matchesInThisRound = collect([]);
-                                    @endphp
-
-                                    {{-- Lấy danh sách các match trong round --}}
-                                    @foreach ($matches as $match)
-                                        @if ($match->round_number == $i)
-                                            @php
-                                                $matchesInThisRound->push($match);
-                                            @endphp
-                                        @endif
-                                    @endforeach
-
-                                    {{-- Hiển thị thông tin match --}}
-                                    @foreach ($matchesInThisRound as $match)
-                                        <div class="match winner-top">
-                                            <div class="match-top team">
-                                                <span class="image"></span>
-                                                <span class="seed">{{ $match->team1_id }}</span>
-                                                <span class="name">{{ $match->team1['team_name'] }}</span>
-                                                <span class="score"></span>
-                                            </div>
-                                            <div class="match-bottom team">
-                                                <span class="image"></span>
-                                                <span class="seed">{{ $match->team2_id }}</span>
-                                                <span class="name">{{ $match->team2['team_name'] }}</span>
-                                                <span class="score"></span>
-                                            </div>
-                                            <div class="match-lines">
-                                                <div class="line one"></div>
-                                                <div class="line two"></div>
-                                            </div>
-                                            <div class="match-lines alt">
-                                                <div class="line one"></div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-
-                                    {{-- Nếu số lượng match trong round ít hơn số lượng match yêu cầu, tạo ra các div rỗng --}}
-                                    @if ($matchesInThisRound->count() < $tournament->team_number / 2 ** $i)
-                                        @for ($j = $matchesInThisRound->count() + 1; $j <= $tournament->team_number / 2 ** $i; $j++)
-                                            <div class="match winner-top">
-                                                <div class="match-top team">
-                                                    <span class="image"></span>
-                                                    <span class="seed"></span>
-                                                    <span class="name"></span>
-                                                    <span class="score"></span>
-                                                </div>
-                                                <div class="match-bottom team">
-                                                    <span class="image"></span>
-                                                    <span class="seed"></span>
-                                                    <span class="name"></span>
-                                                    <span class="score"></span>
-                                                </div>
-                                                <div class="match-lines">
-                                                    <div class="line one"></div>
-                                                    <div class="line two"></div>
-                                                </div>
-                                                <div class="match-lines alt">
-                                                    <div class="line one"></div>
-                                                </div>
-                                            </div>
-                                        @endfor
-                                    @endif
-                                </div>
-                            @endfor
+                        @foreach ($matches as $match)
+                            @if ($match->round_number != $previousRoundNumber)
+                                @if ($previousRoundNumber !== null)
                         </div>
+                            @endif
+                        <div class="column">
+                              @endif
 
+                            <div class="match winner-top">
+                                <div class="match-top team">
+                                    <span class="image"></span>
+                                    <span class="seed">{{ $match->team1_id }}</span>
+                                    <span class="name">{{ $match->team1['team_name'] }}</span>
+                                    <span class="score"></span>
+                                </div>
+                                <div class="match-bottom team">
+                                    <span class="image"></span>
+                                    <span class="seed">{{ $match->team2_id }}</span>
+                                    <span class="name">{{ $match->team2['team_name'] }}</span>
+                                    <span class="score"></span>
+                                </div>
+                                <div class="match-lines">
+                                    <div class="line one"></div>
+                                    <div class="line two"></div>
+                                </div>
+                                <div class="match-lines alt">
+                                    <div class="line one"></div>
+                                </div>
+                            </div>
+
+                            @php
+                                $previousRoundNumber = $match->round_number;
+                            @endphp
+                            @endforeach
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
 </x-app-layout>
 
 <!-- Modal -->

@@ -4,8 +4,11 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\TeamController;
+use App\Models\Matches;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,7 +49,7 @@ Route::middleware(['auth', 'admin'])->prefix("team")->group(function () {
 });
 
 Route::middleware(['auth'])->prefix("match")->group(function () {
-    Route::get('/match/{id}', [TeamController::class, 'create'])->name('team.create');
+    Route::post('/match/{tournamentId}', [MatchesController::class, 'store'])->name('match.store');
 });
 
 Route::resource('chirps', ChirpController::class)
