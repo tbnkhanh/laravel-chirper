@@ -13,6 +13,8 @@ class Tournament extends Model
         'tournament_name',
         'tournament_description',
         'game_played',
+        'is_generate_bracket',
+        'team_number',
         'team_size',
         'start_date',
         'end_date',

@@ -48,8 +48,9 @@ Route::middleware(['auth', 'admin'])->prefix("team")->group(function () {
     Route::delete('/delete/{tournamentId}/{teamId}', [TeamController::class, 'destroy'])->name('team.destroy');
 });
 
-Route::middleware(['auth'])->prefix("match")->group(function () {
-    Route::post('/match/{tournamentId}', [MatchesController::class, 'store'])->name('match.store');
+Route::middleware(['auth','admin'])->prefix("match")->group(function () {
+    Route::post('/generateBracket/{tournamentId}', [MatchesController::class, 'store'])->name('match.store');
+    Route::post('/selectWinningTeam/{matchId}', [MatchesController::class, 'selectWinningTeam'])->name('match.selectWinningTeam');
 });
 
 Route::resource('chirps', ChirpController::class)

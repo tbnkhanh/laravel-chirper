@@ -27,9 +27,13 @@
     max-width: 240px;
     height: 62px;
     margin: 12px 24px 12px 0;
+    cursor: pointer;
   }
   .match .match-top {
     border-radius: 2px 2px 0 0;
+  }
+  .match .match-infor{
+    margin-top: -23px;
   }
   .match .match-bottom {
     border-radius: 0 0 2px 2px;
@@ -48,11 +52,11 @@
   .match .team span:last-child {
     padding-right: 8px;
   }
-  .match .team .score {
+  .match .team .winner {
     margin-left: auto;
   }
   .match .team:first-child {
-    margin-bottom: -1px;
+    /* margin-bottom: -1px; */
   }
   .match-lines {
     display: block;

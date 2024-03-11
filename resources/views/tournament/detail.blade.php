@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight" style="text-align: center">
             Welcome to the Tournament: {{ $tournament->tournament_name }}
-            </h>
+            </h1>
     </x-slot>
 
     <div class="py-2">
@@ -100,29 +100,19 @@
     <div class="py-2">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div style="text-align: center; font-size: 20px">
-                <b>Tournament Bracket</b>
-            </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-5">
-                <div class="p-6 text-gray-900">
-                    <div style="text-align: center">
-                        <form action="{{ route('match.store', $tournament->id)}}" method="post">
-                            @csrf
-                            <button class="btn btn-success">Generate Bracket</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="py-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div style="text-align: center; font-size: 20px">
                 <b class="test">Tournament Bracket</b>
             </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-5">
                 <div class="p-6 text-gray-900">
+                    @if (Auth::user()->user_type == 'admin')
+                        <div style="text-align: center">
+                            <form action="{{ route('match.store', $tournament->id) }}" method="post">
+                                @csrf
+                                <button class="btn btn-success">Generate Bracket</button>
+                            </form>
+                        </div>
+                    @endif
+
                     <div class="theme theme-dark">
 
                         <div class="bracket disable-image">
@@ -131,7 +121,7 @@
                             @endphp
 
                             @for ($i = 1; $i <= $round; $i++)
-                                <div class="column">
+                                <div class="column">    
                                     @php
                                         $matchesInThisRound = collect([]);
                                     @endphp
@@ -145,20 +135,38 @@
                                         @endif
                                     @endforeach
 
-                                    {{-- Hiển thị thông tin match --}}
                                     @foreach ($matchesInThisRound as $match)
-                                        <div class="match winner-top">
+                                        <div class="match winner-top" id="match_{{ $match->id }}">
+                                            <div class="match-infor">Round: {{ $match->round_number }} - Match:
+                                                {{ $match->match_number }}</div>
                                             <div class="match-top team">
                                                 <span class="image"></span>
-                                                <span class="seed">{{ $match->team1_id }}</span>
-                                                <span class="name">{{ $match->team1['team_name'] }}</span>
-                                                <span class="score"></span>
+                                                <span class="team1Id">{{ $match->team1_id }}</span>
+                                                @if ($match->team1_id !== null)
+                                                    <span class="name">{{ $match->team1['team_name'] }}</span>
+                                                @else
+                                                    <span class="name"></span>
+                                                @endif
+                                                <span class="winner">
+                                                    @if ($match->winner_team_id === $match->team1_id && $match->winner_team_id !== null)
+                                                        Winner
+                                                    @endif
+                                                </span>
+
                                             </div>
                                             <div class="match-bottom team">
                                                 <span class="image"></span>
-                                                <span class="seed">{{ $match->team2_id }}</span>
-                                                <span class="name">{{ $match->team2['team_name'] }}</span>
-                                                <span class="score"></span>
+                                                <span class="team2Id">{{ $match->team2_id }}</span>
+                                                @if ($match->team2_id !== null)
+                                                    <span class="name">{{ $match->team2['team_name'] }}</span>
+                                                @else
+                                                    <span class="name"></span>
+                                                @endif
+                                                <span class="winner">
+                                                    @if ($match->winner_team_id === $match->team2_id && $match->winner_team_id !== null)
+                                                        Winner
+                                                    @endif
+                                                </span>
                                             </div>
                                             <div class="match-lines">
                                                 <div class="line one"></div>
@@ -176,15 +184,15 @@
                                             <div class="match winner-top">
                                                 <div class="match-top team">
                                                     <span class="image"></span>
-                                                    <span class="seed"></span>
+                                                    <span class="team1Id"></span>
                                                     <span class="name"></span>
-                                                    <span class="score"></span>
+                                                    <span class="winner"></span>
                                                 </div>
                                                 <div class="match-bottom team">
                                                     <span class="image"></span>
-                                                    <span class="seed"></span>
+                                                    <span class="team2Id"></span>
                                                     <span class="name"></span>
-                                                    <span class="score"></span>
+                                                    <span class="winner"></span>
                                                 </div>
                                                 <div class="match-lines">
                                                     <div class="line one"></div>
@@ -206,11 +214,32 @@
         </div>
 </x-app-layout>
 
-<!-- Modal -->
+
+<!-- Modal Select Team Win-->
+<div class="modal fade" id="selectTeamWin" tabindex="-1" aria-labelledby="selectTeamWin" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top:15%">
+        <div class="modal-content">
+            <div class="modal-body" id="modal-body-team-win" style="text-align: center">
+                <p>Select the winning team:</p>
+                <div id="winningTeams"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form id="btnSelectTeamWin" method="POST" action="">
+                    @csrf
+                    <button class="btn btn-danger">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Delete-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="margin-top:15%">
         <div class="modal-content">
-            <div class="modal-body" style="text-align: center">
+            <div class="modal-body" id ="modal-body-delete" style="text-align: center">
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -224,6 +253,10 @@
     </div>
 </div>
 
+@php
+    $userType = Auth::user()->user_type;
+@endphp
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var deleteButtons = document.querySelectorAll('#btn-delete');
@@ -232,12 +265,60 @@
                 var teamId = this.getAttribute('data-team-id');
                 var tournamentId = this.getAttribute('data-tournament-id');
                 var teamName = this.getAttribute('data-team-name');
-                var modalBody = document.querySelector('.modal-body');
+                var modalBody = document.querySelector('#modal-body-delete');
                 modalBody.innerHTML = '<h1>Do you confirm delete: ' +
                     teamName + '?</h1>';
                 var deleteForm = document.querySelector('#deleteForm');
                 deleteForm.action = '/team/delete/' + tournamentId + '/' + teamId;
             });
         });
+
+        var userType = "{{ $userType }}";
+        if (userType === 'admin' ) {
+            var matches = document.querySelectorAll('.match.winner-top');
+            matches.forEach(function(match) {
+                match.addEventListener('click', function() {
+                    var matchId = match.getAttribute('id').split('_')[1]; 
+                    var team1Name = match.querySelector('.match-top .name').innerText;
+                    var team2Name = match.querySelector('.match-bottom .name').innerText;
+                    var team1Id = match.querySelector('.match-top .team1Id').innerText;
+                    var team2Id = match.querySelector('.match-bottom .team2Id').innerText;
+                    var winnerTeamId = match.querySelector('.match-top .winner').innerText;
+                    var winnerTeamId2 = match.querySelector('.match-bottom .winner').innerText;
+
+                    if (winnerTeamId.trim() !== ''|| winnerTeamId2.trim()!=='') {
+                        return;
+                    } 
+
+                    var modalBody = document.getElementById('modal-body-team-win');
+                    modalBody.innerHTML = '<p>Select the winning team:</p>';
+                    modalBody.innerHTML +=
+                        '<div><label><input type="radio" name="winning_team" value="' +
+                        team1Id +
+                        '"> ' + team1Name + '</label></div>';
+                    modalBody.innerHTML +=
+                        '<div><label><input type="radio" name="winning_team" value="' +
+                        team2Id +
+                        '"> ' + team2Name + '</label></div>';
+
+                    var btnSelectTeamWin = document.getElementById('btnSelectTeamWin');
+
+                    $('#selectTeamWin').modal('show'); // Hiển thị modal
+
+                    btnSelectTeamWin.addEventListener('submit', function(event) {
+                        event.preventDefault(); 
+
+                        var winningTeamId = document.querySelector(
+                            'input[name="winning_team"]:checked').value;
+
+                        btnSelectTeamWin.action = '/match/' + 'selectWinningTeam/' +
+                            matchId + '?winning_team=' + winningTeamId;
+
+                        btnSelectTeamWin.submit();
+                    });
+                });
+            });
+        }
+
     });
 </script>

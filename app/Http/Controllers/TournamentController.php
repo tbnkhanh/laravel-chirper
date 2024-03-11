@@ -55,15 +55,6 @@ class TournamentController extends Controller
         $tournament->end_date = $request->input('end_date');
         $tournament->save();
 
-        // $tournament = Tournament::create([
-        //     'user_id' => Auth::id(),
-        //     'tournament_name' => $data['tournament_name'],
-        //     'tournament_description' => $data['tournament_description'],
-        //     'game_played' => $data['game_played'],
-        //     'game_mode' => $data['game_mode'],
-        //     'start_date' => $data['start_date'],
-        //     'end_date' => $data['end_date'],
-        // ]);
         return redirect('/tournament/index');
     }
     /**
@@ -75,13 +66,13 @@ class TournamentController extends Controller
         $teamsWithPlayers = Team::with('players.user')
             ->where('tournament_id', $id)   
             ->get();
-        // ->toArray();
+
         $matches = Matches::with(['team1', 'team2', 'winnerTeam'])
         ->where('tournament_id', $id)
         ->orderBy('round_number')
         ->orderBy('match_number')
         ->get();
-        // dd($matches); 
+
         return view('tournament.detail', compact('tournament', 'teamsWithPlayers', 'matches'));
     }
 
@@ -91,11 +82,6 @@ class TournamentController extends Controller
     public function edit($id)
     {
         $tournament = Tournament::find($id);
-        // $start_date = Carbon::parse($tournament->start_date);
-        // $end_date = Carbon::parse($tournament->end_date);
-        // $tournament->start_date = $start_date->toDateString();
-        // $tournament->end_date = $end_date->toDateString();
-        // dd($tournament);
         return view('tournament.edit', compact('tournament'));
     }
 
