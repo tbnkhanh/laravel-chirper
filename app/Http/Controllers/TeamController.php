@@ -34,7 +34,8 @@ class TeamController extends Controller
     private function validatePlayers(Request $request)
     {
         $data = $request->validate([
-            'team_name' => 'required|string|min:3',
+            'team_name' => 'required|string',
+            'seed' => 'required|',
             'player_email.*' => 'required|email',
             'in_game.*' => 'required|string',
         ]);
@@ -61,11 +62,11 @@ class TeamController extends Controller
                 ]);
             }
 
-            if (!in_array($email, $usersRemain)) {
-                throw ValidationException::withMessages([
-                    'email_invalid' => "User has $email already in other team"
-                ]);
-            }
+            // if (!in_array($email, $usersRemain)) {
+            //     throw ValidationException::withMessages([
+            //         'email_invalid' => "User has $email already in other team"
+            //     ]);
+            // }
             array_push($users, $user->id);
             array_push($checkedEmails, $email);
         }
@@ -84,6 +85,7 @@ class TeamController extends Controller
         // dd($response);
         $team = Team::create([
             'tournament_id' => $tournamentId,
+            'seed' => $response['data']['seed'],
             'team_name' => $response['data']['team_name'],
         ]);
         $data = [];
@@ -100,7 +102,7 @@ class TeamController extends Controller
     public function update($tournamentId, $teamId, Request $request)
     {
         $data = $request->validate([
-            'team_name' => 'required|string|min:3',
+            'team_name' => 'required|string',
             'player_email.*' => 'required|email',
             'in_game.*' => 'required|string',
         ]);

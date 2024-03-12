@@ -2,11 +2,11 @@
     <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight" style="text-align: center">
             Welcome to the Tournament: {{ $tournament->tournament_name }}
-            </h1>
+        </h1>
     </x-slot>
 
     <div class="py-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="max-width: 85rem">
             <div style="text-align: center; font-size: 20px">
                 <b>Tournament Information</b>
             </div>
@@ -40,71 +40,13 @@
     </div>
 
     <div class="py-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div style="text-align: center; font-size: 20px">
-                <b>All Teams Participate</b>
-            </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-5">
-                <div class="p-6 text-gray-900">
-                    @if (count($teamsWithPlayers) === 0)
-                        <div>There are currently no teams added</div>
-                    @endif
-
-                    @if (Auth::user()->user_type == 'admin')
-                        <a href="{{ route('team.create', $tournament) }}" class="btn btn-primary my-3"
-                            data-mdb-ripple-init>Add Team</a>
-                    @endif
-
-                    @foreach ($teamsWithPlayers as $team)
-                        <h1 style="text-align: center; font-size: 20px">{{ $team->team_name }}</h1>
-                        <div style="float: right">
-                            @if (Auth::user()->user_type == 'admin')
-                                <a href="{{ route('team.edit', $team) }}" class="btn btn-warning "
-                                    data-mdb-ripple-init>Edit Team</a>
-                                <button class="btn btn-danger" id="btn-delete" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" data-team-name="{{ $team->team_name }}"
-                                    data-team-id="{{ $team->id }}" data-tournament-id="{{ $tournament->id }}">
-                                    Delete Team
-                                </button>
-                            @endif
-                        </div>
-
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Player_ID</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">In Game Name</th>
-                                    <th scope="col">Email</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($team->players as $player)
-                                    <tr>
-                                        <th scope="row">{{ $player->id }}</th>
-                                        <td>{{ $player->user['name'] }}</td>
-                                        <td>{{ $player->in_game_name }}</td>
-                                        <td>{{ $player->user['email'] }}</td>
-                                    </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
-                    @endforeach
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="py-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="max-width: 85rem">
             <div style="text-align: center; font-size: 20px">
                 <b class="test">Tournament Bracket</b>
             </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-5">
                 <div class="p-6 text-gray-900">
-                    @if (Auth::user()->user_type == 'admin')
+                    @if (Auth::user()->user_type == 'admin' && $tournament->is_generate_bracket === '0')
                         <div style="text-align: center">
                             <form action="{{ route('match.store', $tournament->id) }}" method="post">
                                 @csrf
@@ -115,13 +57,12 @@
 
                     <div class="theme theme-dark">
 
-                        <div class="bracket disable-image">
+                        <div class="bracket">
                             @php
                                 $round = log($tournament->team_number, 2);
                             @endphp
-
                             @for ($i = 1; $i <= $round; $i++)
-                                <div class="column">    
+                                <div class="column">
                                     @php
                                         $matchesInThisRound = collect([]);
                                     @endphp
@@ -136,13 +77,15 @@
                                     @endforeach
 
                                     @foreach ($matchesInThisRound as $match)
-                                        <div class="match winner-top" id="match_{{ $match->id }}">
+                                        <div class="match winner-top" id="{{ $match->id }}"
+                                            data-team1-id="{{ $match->team1_id }}"
+                                            data-team2-id="{{ $match->team2_id }}">
+
                                             <div class="match-infor">Round: {{ $match->round_number }} - Match:
                                                 {{ $match->match_number }}</div>
                                             <div class="match-top team">
-                                                <span class="image"></span>
-                                                <span class="team1Id">{{ $match->team1_id }}</span>
                                                 @if ($match->team1_id !== null)
+                                                    <span class="team1Seed">{{ $match->team1['seed'] }}</span>
                                                     <span class="name">{{ $match->team1['team_name'] }}</span>
                                                 @else
                                                     <span class="name"></span>
@@ -152,12 +95,11 @@
                                                         Winner
                                                     @endif
                                                 </span>
-
                                             </div>
+
                                             <div class="match-bottom team">
-                                                <span class="image"></span>
-                                                <span class="team2Id">{{ $match->team2_id }}</span>
                                                 @if ($match->team2_id !== null)
+                                                    <span class="team2Seed">{{ $match->team2['seed'] }}</span>
                                                     <span class="name">{{ $match->team2['team_name'] }}</span>
                                                 @else
                                                     <span class="name"></span>
@@ -168,13 +110,17 @@
                                                     @endif
                                                 </span>
                                             </div>
-                                            <div class="match-lines">
-                                                <div class="line one"></div>
-                                                <div class="line two"></div>
-                                            </div>
+
+                                            @if ($match->round_number != $round)
+                                                <div class="match-lines">
+                                                    <div class="line one"></div>
+                                                    <div class="line two"></div>
+                                                </div>
+                                            @endif
                                             <div class="match-lines alt">
                                                 <div class="line one"></div>
                                             </div>
+
                                         </div>
                                     @endforeach
 
@@ -183,21 +129,23 @@
                                         @for ($j = $matchesInThisRound->count() + 1; $j <= $tournament->team_number / 2 ** $i; $j++)
                                             <div class="match winner-top">
                                                 <div class="match-top team">
-                                                    <span class="image"></span>
+
                                                     <span class="team1Id"></span>
                                                     <span class="name"></span>
                                                     <span class="winner"></span>
                                                 </div>
                                                 <div class="match-bottom team">
-                                                    <span class="image"></span>
+
                                                     <span class="team2Id"></span>
                                                     <span class="name"></span>
                                                     <span class="winner"></span>
                                                 </div>
-                                                <div class="match-lines">
-                                                    <div class="line one"></div>
-                                                    <div class="line two"></div>
-                                                </div>
+                                                @if ($i != $round)
+                                                    <div class="match-lines">
+                                                        <div class="line one"></div>
+                                                        <div class="line two"></div>
+                                                    </div>
+                                                @endif
                                                 <div class="match-lines alt">
                                                     <div class="line one"></div>
                                                 </div>
@@ -206,12 +154,84 @@
                                     @endif
                                 </div>
                             @endfor
+                            <div class="column">
+                                {{-- <div class="match winner-top"> --}}
+                                @if ($tournament->winner_team !== null)
+                                    <div style=" text-align: center; width: 150px">
+                                        <b>Champion</b>
+                                        <img src="{{ asset('img/trophy-cup.png') }}">
+                                        <b>{{ $tournament->winner_team }}</b>
+                                    </div>
+                                @endif
+
+                                {{-- </div> --}}
+                            </div>
+
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-2">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="max-width: 85rem">
+                <div style="text-align: center; font-size: 20px">
+                    <b>All Teams Participate</b>
+                </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-5">
+                    <div class="p-6 text-gray-900">
+                        @if (count($teamsWithPlayers) === 0)
+                            <div>There are currently no teams added</div>
+                        @endif
+
+                        @if (Auth::user()->user_type == 'admin')
+                            <a href="{{ route('team.create', $tournament) }}" class="btn btn-primary my-3"
+                                data-mdb-ripple-init>Add Team</a>
+                        @endif
+
+                        @foreach ($teamsWithPlayers as $team)
+                            <h1 style="text-align: center; font-size: 20px">{{ $team->team_name }}</h1>
+                            <div style="float: right">
+                                @if (Auth::user()->user_type == 'admin')
+                                    <a href="{{ route('team.edit', $team) }}" class="btn btn-warning "
+                                        data-mdb-ripple-init>Edit Team</a>
+                                    <button class="btn btn-danger" id="btn-delete" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal" data-team-name="{{ $team->team_name }}"
+                                        data-team-id="{{ $team->id }}" data-tournament-id="{{ $tournament->id }}">
+                                        Delete Team
+                                    </button>
+                                @endif
+                            </div>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Player_ID</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">In Game Name</th>
+                                        <th scope="col">Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($team->players as $player)
+                                        <tr>
+                                            <th scope="row">{{ $player->id }}</th>
+                                            <td>{{ $player->user['name'] }}</td>
+                                            <td>{{ $player->in_game_name }}</td>
+                                            <td>{{ $player->user['email'] }}</td>
+                                        </tr>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
+                        @endforeach
 
                     </div>
                 </div>
             </div>
         </div>
+
+
 </x-app-layout>
 
 
@@ -274,21 +294,22 @@
         });
 
         var userType = "{{ $userType }}";
-        if (userType === 'admin' ) {
+        if (userType === 'admin') {
             var matches = document.querySelectorAll('.match.winner-top');
             matches.forEach(function(match) {
                 match.addEventListener('click', function() {
-                    var matchId = match.getAttribute('id').split('_')[1]; 
+                    var matchId = match.getAttribute('id');
+                    var team1Id = match.getAttribute('data-team1-id');
+                    var team2Id = match.getAttribute('data-team2-id');
+
                     var team1Name = match.querySelector('.match-top .name').innerText;
                     var team2Name = match.querySelector('.match-bottom .name').innerText;
-                    var team1Id = match.querySelector('.match-top .team1Id').innerText;
-                    var team2Id = match.querySelector('.match-bottom .team2Id').innerText;
                     var winnerTeamId = match.querySelector('.match-top .winner').innerText;
                     var winnerTeamId2 = match.querySelector('.match-bottom .winner').innerText;
 
-                    if (winnerTeamId.trim() !== ''|| winnerTeamId2.trim()!=='') {
+                    if (winnerTeamId.trim() !== '' || winnerTeamId2.trim() !== '') {
                         return;
-                    } 
+                    }
 
                     var modalBody = document.getElementById('modal-body-team-win');
                     modalBody.innerHTML = '<p>Select the winning team:</p>';
@@ -306,7 +327,7 @@
                     $('#selectTeamWin').modal('show'); // Hiển thị modal
 
                     btnSelectTeamWin.addEventListener('submit', function(event) {
-                        event.preventDefault(); 
+                        event.preventDefault();
 
                         var winningTeamId = document.querySelector(
                             'input[name="winning_team"]:checked').value;
@@ -319,6 +340,7 @@
                 });
             });
         }
+
 
     });
 </script>

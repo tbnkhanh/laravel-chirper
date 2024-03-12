@@ -72,7 +72,7 @@ class TournamentController extends Controller
         ->orderBy('round_number')
         ->orderBy('match_number')
         ->get();
-
+        // dd($matches->toArray());
         return view('tournament.detail', compact('tournament', 'teamsWithPlayers', 'matches'));
     }
 

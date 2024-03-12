@@ -20,7 +20,17 @@
                                     {{ $errors->first('team_name') }}
                                 </p>
                             @endif
-                        </div>
+                        </div>  
+
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <label class="form-label" for="form4Example1">Seed</label>
+                            <input type="text" id="form4Example1" class="form-control" name="seed" />
+                            @if ($errors->has('seed'))
+                                <p class="text-danger">
+                                    {{ $errors->first('seed') }}
+                                </p>
+                            @endif
+                        </div>  
 
                         @for ($i = 1; $i <= $tournament->team_size; $i++)
                             <div data-mdb-input-init class="form-outline mb-4">

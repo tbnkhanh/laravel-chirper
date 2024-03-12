@@ -9,9 +9,10 @@
   }
   .bracket {
     display: flex;
-    flex-direction: row;
+    flex-direction: row;  
     position: relative;
   }
+  
   .column {
     display: flex;
     flex-direction: column;
@@ -19,6 +20,14 @@
     justify-content: space-around;
     align-content: center;
   }
+
+  /* .cup {
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+  } */
+  
   .match {
     position: relative;
     display: flex;

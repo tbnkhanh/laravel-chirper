@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<body>
+<?php
+    $players = range(1, 16);
+    $count = count($players);
+    $numberOfRounds = log($count, 2);
+                                                                      //1,2,4
+                                                                      //1,2,3,4,5,6,7,8
+    for ($i = 0; $i < $numberOfRounds - 1; $i++) {
+         printf('So lan chay thu %s <br />', $i+1);
+        $out = array();
+        $splice = pow(2, $i); 
+		// printf('splice %s <br />', $splice);
+        while (count($players) > 0) {
+            $out = array_merge($out, array_splice($players, 0, $splice)); 
+            echo "out1 <br/>";
+          foreach ($out as $value) {
+             echo $value . " " ; 
+           }
+           echo "<br/>";
+           
+            $out = array_merge($out, array_splice($players, -$splice));
+            echo "out2 <br/>";
+            foreach ($out as $value) {
+              echo $value . " " ; 
+             }
+           echo "<br/>";
+           
+           echo "players <br/>";
+            foreach ($players as $value) {
+              echo $value . " " ; 
+             }
+           echo "<br/>";
+        }            
+
+        $players = $out;
+	
+    }
+
+    // Print match list.
+    for ($i = 0; $i < $count; $i++) {
+        printf('%s vs %s<br />%s', $players[$i], $players[++$i], PHP_EOL);
+    }
+?>
+
+</body>
+</html>
+

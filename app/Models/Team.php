@@ -11,7 +11,8 @@ class Team extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'team_name',
-        'tournament_id'
+        'tournament_id',
+        'seed'
     ];
     public function players()
     {

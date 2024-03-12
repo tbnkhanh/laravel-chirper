@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 08, 2024 at 11:12 AM
+-- Generation Time: Mar 12, 2024 at 11:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -68,17 +68,27 @@ CREATE TABLE `failed_jobs` (
 CREATE TABLE `matches` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `tournament_id` bigint(20) UNSIGNED NOT NULL,
-  `round_number` int(11) NOT NULL,
-  `match_number` int(11) NOT NULL,
-  `start_date` datetime NOT NULL,
-  `end_date` datetime NOT NULL,
-  `team1_id` bigint(20) UNSIGNED NOT NULL,
-  `team2_id` bigint(20) UNSIGNED NOT NULL,
-  `winner_team_id` bigint(20) UNSIGNED NOT NULL,
-  `status` varchar(255) NOT NULL,
+  `round_number` int(11) DEFAULT NULL,
+  `match_number` int(11) DEFAULT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `team1_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `team2_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `winner_team_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `matches`
+--
+
+INSERT INTO `matches` (`id`, `tournament_id`, `round_number`, `match_number`, `start_date`, `end_date`, `team1_id`, `team2_id`, `winner_team_id`, `status`, `created_at`, `updated_at`) VALUES
+(264, 1, 1, 1, NULL, NULL, 1, 8, NULL, NULL, '2024-03-12 03:03:59', '2024-03-12 03:03:59'),
+(265, 1, 1, 2, NULL, NULL, 4, 5, NULL, NULL, '2024-03-12 03:03:59', '2024-03-12 03:03:59'),
+(266, 1, 1, 3, NULL, NULL, 2, 7, NULL, NULL, '2024-03-12 03:03:59', '2024-03-12 03:03:59'),
+(267, 1, 1, 4, NULL, NULL, 3, 6, NULL, NULL, '2024-03-12 03:03:59', '2024-03-12 03:03:59');
 
 -- --------------------------------------------------------
 
@@ -160,10 +170,34 @@ INSERT INTO `players` (`id`, `user_id`, `team_id`, `in_game_name`, `created_at`,
 (36, 6, 2, 'darius', '2024-03-07 06:37:38', '2024-03-06 23:46:27'),
 (38, 5, 2, 'yasuo1', '2024-03-07 06:42:28', '2024-03-07 06:42:28'),
 (41, 7, 1, 'frieza', '2024-03-07 09:25:24', '2024-03-07 09:25:24'),
-(42, 8, 3, 'gano', '2024-03-07 09:25:54', '2024-03-07 09:25:54'),
+(42, 8, 3, 'gohans', '2024-03-07 09:25:54', '2024-03-11 23:40:36'),
 (43, 9, 3, 'bulk', '2024-03-07 09:25:54', '2024-03-07 09:25:54'),
 (44, 10, 4, 'mata', '2024-03-07 09:28:16', '2024-03-07 09:28:16'),
-(45, 11, 4, 'vladi', '2024-03-07 09:28:16', '2024-03-07 09:28:16');
+(45, 11, 4, 'vladi', '2024-03-07 09:28:16', '2024-03-07 09:28:16'),
+(46, 12, 5, 'tanj', '2024-03-11 02:06:17', '2024-03-11 02:06:17'),
+(47, 13, 5, 'nakor', '2024-03-11 02:06:17', '2024-03-11 02:06:17'),
+(48, 14, 6, 'gena', '2024-03-11 02:06:53', '2024-03-11 02:06:53'),
+(49, 15, 6, 'kjna', '2024-03-11 02:06:53', '2024-03-11 02:06:53'),
+(50, 16, 7, 'geko', '2024-03-11 02:07:40', '2024-03-11 02:07:40'),
+(51, 17, 7, 'rena', '2024-03-11 02:07:40', '2024-03-11 02:07:40'),
+(54, 18, 8, 'fena', '2024-03-11 08:37:52', '2024-03-11 08:37:52'),
+(55, 19, 8, 'yuna', '2024-03-11 08:37:52', '2024-03-11 08:37:52'),
+(56, 4, 85, 'ten', '2024-03-12 06:39:37', '2024-03-12 06:39:37'),
+(57, 5, 86, 'sad', '2024-03-12 06:39:47', '2024-03-12 06:39:47'),
+(58, 6, 87, 'goku', '2024-03-12 06:39:57', '2024-03-12 06:39:57'),
+(59, 8, 88, 'gohans', '2024-03-12 06:40:09', '2024-03-12 06:40:09'),
+(60, 7, 89, 'uh', '2024-03-12 06:41:07', '2024-03-12 06:41:07'),
+(61, 9, 90, '1songoku', '2024-03-12 06:41:21', '2024-03-12 06:41:21'),
+(62, 10, 91, 'van', '2024-03-12 06:41:37', '2024-03-12 06:41:37'),
+(63, 11, 92, 'vaz', '2024-03-12 06:41:47', '2024-03-12 06:41:47'),
+(64, 12, 93, 'ean', '2024-03-12 06:41:57', '2024-03-12 06:41:57'),
+(65, 13, 94, 'qa', '2024-03-12 06:42:07', '2024-03-12 06:42:07'),
+(66, 14, 95, 'gh', '2024-03-12 06:42:16', '2024-03-12 06:42:16'),
+(67, 15, 96, 'juj', '2024-03-12 06:42:35', '2024-03-12 06:42:35'),
+(68, 16, 97, 'ba', '2024-03-12 06:42:44', '2024-03-12 06:42:44'),
+(69, 17, 98, 'fds', '2024-03-12 06:42:56', '2024-03-12 06:42:56'),
+(70, 18, 99, 'nhn', '2024-03-12 06:43:11', '2024-03-12 06:43:11'),
+(71, 19, 100, 'edf', '2024-03-12 06:43:19', '2024-03-12 06:43:19');
 
 -- --------------------------------------------------------
 
@@ -175,6 +209,7 @@ CREATE TABLE `teams` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `team_name` varchar(255) NOT NULL,
   `tournament_id` bigint(20) UNSIGNED NOT NULL,
+  `seed` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -183,11 +218,31 @@ CREATE TABLE `teams` (
 -- Dumping data for table `teams`
 --
 
-INSERT INTO `teams` (`id`, `team_name`, `tournament_id`, `created_at`, `updated_at`) VALUES
-(1, 'Team KNA', 1, '2024-03-04 09:20:41', '2024-03-04 09:20:41'),
-(2, 'Team PTIT', 1, '2024-03-06 23:37:38', '2024-03-06 23:37:38'),
-(3, 'Team JSA', 1, '2024-03-07 02:25:54', '2024-03-07 02:25:54'),
-(4, 'Team MAT', 1, '2024-03-07 02:28:16', '2024-03-07 02:28:16');
+INSERT INTO `teams` (`id`, `team_name`, `tournament_id`, `seed`, `created_at`, `updated_at`) VALUES
+(1, 'Team KNA', 1, 1, '2024-03-04 09:20:41', '2024-03-04 09:20:41'),
+(2, 'Team PTIT', 1, 2, '2024-03-06 23:37:38', '2024-03-06 23:37:38'),
+(3, 'Team JSA', 1, 3, '2024-03-07 02:25:54', '2024-03-07 02:25:54'),
+(4, 'Team MAT', 1, 4, '2024-03-07 02:28:16', '2024-03-07 02:28:16'),
+(5, 'Team BAC', 1, 5, '2024-03-10 19:06:17', '2024-03-10 19:06:17'),
+(6, 'Team Kano', 1, 6, '2024-03-10 19:06:53', '2024-03-10 19:06:53'),
+(7, 'Team VTA', 1, 7, '2024-03-10 19:07:40', '2024-03-10 19:07:40'),
+(8, 'Team KAL', 1, 8, '2024-03-11 01:37:52', '2024-03-11 01:37:52'),
+(85, 'T1', 2, 1, '2024-03-11 23:39:37', '2024-03-11 23:39:37'),
+(86, 'T2', 2, 2, '2024-03-11 23:39:47', '2024-03-11 23:39:47'),
+(87, 'T3', 2, 3, '2024-03-11 23:39:57', '2024-03-11 23:39:57'),
+(88, 'T4', 2, 4, '2024-03-11 23:40:09', '2024-03-11 23:40:09'),
+(89, 'T5', 2, 5, '2024-03-11 23:41:07', '2024-03-11 23:41:07'),
+(90, 'T6', 2, 6, '2024-03-11 23:41:21', '2024-03-11 23:41:21'),
+(91, 'T7', 2, 7, '2024-03-11 23:41:37', '2024-03-11 23:41:37'),
+(92, 'T8', 2, 8, '2024-03-11 23:41:47', '2024-03-11 23:41:47'),
+(93, 'T9', 2, 9, '2024-03-11 23:41:57', '2024-03-11 23:41:57'),
+(94, 'T10', 2, 10, '2024-03-11 23:42:07', '2024-03-11 23:42:07'),
+(95, 'T11', 2, 11, '2024-03-11 23:42:16', '2024-03-11 23:42:16'),
+(96, 'T12', 2, 12, '2024-03-11 23:42:35', '2024-03-11 23:42:35'),
+(97, 'T13', 2, 13, '2024-03-11 23:42:44', '2024-03-11 23:42:44'),
+(98, 'T14', 2, 14, '2024-03-11 23:42:56', '2024-03-11 23:42:56'),
+(99, 'T15', 2, 15, '2024-03-11 23:43:11', '2024-03-11 23:43:11'),
+(100, 'T16', 2, 16, '2024-03-11 23:43:19', '2024-03-11 23:43:19');
 
 -- --------------------------------------------------------
 
@@ -203,7 +258,8 @@ CREATE TABLE `tournaments` (
   `game_played` varchar(255) NOT NULL,
   `team_size` varchar(11) NOT NULL,
   `team_number` int(11) NOT NULL,
-  `is_genarate_bracket` varchar(1) NOT NULL,
+  `winner_team` varchar(11) DEFAULT NULL,
+  `is_generate_bracket` varchar(255) NOT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
@@ -214,9 +270,9 @@ CREATE TABLE `tournaments` (
 -- Dumping data for table `tournaments`
 --
 
-INSERT INTO `tournaments` (`id`, `user_id`, `tournament_name`, `tournament_description`, `game_played`, `team_size`, `team_number`, `is_genarate_bracket`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
-(1, 2, 'League of Legends World Championship', 'This tournament is about League of Legends, this is the World Championship', 'FIFA', '2', 4, '0', '2024-03-07', '2024-03-13', '2024-03-03 03:16:10', '2024-03-08 03:00:51'),
-(2, 2, 'CS:GO World Championship', 'Description about CS:GO World Championship', 'CS:GO', '3', 8, '0', '2024-03-06', '2024-03-07', '2024-03-04 01:32:33', '2024-03-06 03:14:04');
+INSERT INTO `tournaments` (`id`, `user_id`, `tournament_name`, `tournament_description`, `game_played`, `team_size`, `team_number`, `winner_team`, `is_generate_bracket`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, 2, 'League of Legends World Championship', 'This tournament is about League of Legends, this is the World Championship', 'FIFA', '2', 8, NULL, '1', '2024-03-07', '2024-03-13', '2024-03-03 03:16:10', '2024-03-12 03:03:59'),
+(2, 2, 'CS:GO World Championship', 'Description about CS:GO World Championship', 'CS:GO', '1', 16, NULL, '0', '2024-03-06', '2024-03-07', '2024-03-04 01:32:33', '2024-03-12 02:40:27');
 
 -- --------------------------------------------------------
 
@@ -357,7 +413,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `matches`
 --
 ALTER TABLE `matches`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=268;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -375,13 +431,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `players`
 --
 ALTER TABLE `players`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `teams`
 --
 ALTER TABLE `teams`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT for table `tournaments`
