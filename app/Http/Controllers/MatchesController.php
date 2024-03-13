@@ -50,7 +50,7 @@ class MatchesController extends Controller
 
             $players = $out;
         }
-        // 1 2 3 4 5 6 7 8
+        // add loser bracket, ko gap nhau
 
         $j = 1;
         for ($i = 0; $i < $team_number; $i++) {
@@ -62,7 +62,7 @@ class MatchesController extends Controller
                 ['tournament_id', '=', $tournamentId],
                 ['seed', '=', $players[++$i]]
             ])->first();
-            Matches::create(['tournament_id' => $tournamentId, 'round_number' => 1, 'match_number' => $j++, 'team1_id' => $team1->id, 'team2_id' => $team2->id]);
+            Matches::create(['tournament_id' => $tournamentId, 'round_number' => 1, 'match_number' => $j++, 'team1_id' => $team1->id, 'team2_id' => $team2->id, 'type_bracket' => "winner"]);
         }
 
         $tournament->is_generate_bracket = 1;
@@ -71,7 +71,43 @@ class MatchesController extends Controller
     }
 
 
+    private function matchForNextRound($tournamentId, $roundNumber, $matchNumber, $typeBracket, $teamId, $currentMatchNumber ){
+        $match_for_next_round = Matches::where([
+            ['tournament_id', '=', $tournamentId],
+            ['round_number', '=', $roundNumber],
+            ['match_number', '=', $matchNumber],
+            ['type_bracket', '=', $typeBracket]
+        ])->first();
 
+        //match for next round already exist
+        if ($match_for_next_round !== null) {
+            if ($match_for_next_round->team1_id === null) { 
+                $match_for_next_round->team1_id = $teamId;
+                $match_for_next_round->save();
+            }
+            if ($match_for_next_round->team2_id === null) {
+                $match_for_next_round->team2_id = $teamId;
+                $match_for_next_round->save();
+            }
+        } else {
+            //create new match for next round
+            $match_new_for_next_round = Matches::create([
+                'tournament_id' => $tournamentId,
+                'round_number' => $roundNumber,
+                'match_number' => $matchNumber,
+                'type_bracket' => $typeBracket,
+                'team1_id' => null,
+                'team2_id' => null
+            ]);
+            if ($currentMatchNumber % 2 !== 0) {
+                $match_new_for_next_round->team1_id = $teamId;
+                $match_new_for_next_round->save();
+            } else {
+                $match_new_for_next_round->team2_id = $teamId;
+                $match_new_for_next_round->save();
+            }
+        }
+    }
 
     public function selectWinningTeam($matchId, Request $request)
     {
@@ -82,59 +118,52 @@ class MatchesController extends Controller
             $match->winner_team_id = $winningTeamId;
             $match->save();
         }
-
-        //update winner team to tournament
         $tournament = Tournament::find($match->tournament_id);
-        $round = intval(log($tournament->team_number, 2));;
-        $teamWinner = Team::find($winningTeamId);
-        if ($match->round_number === $round) {
-            $tournament->winner_team = $teamWinner->team_name;
-            $tournament->save();
-        } else{
+
+
+        //handle team for loser bracket 
+        if ($match->type_bracket == 'loser') {
+            // add winner team to next round
             $current_match_number = $match->match_number;
-            $next_round_number = $match->round_number + 1;
-            $next_match_number = 0;
-            if ($current_match_number % 2 === 0) {
-                $next_match_number = $current_match_number / 2;
+            if($match->round_number % 2 !== 0){
+                $this->matchForNextRound($tournament->id, $match->round_number + 1, $match->match_number, 'loser', $winningTeamId, $current_match_number);
             } else {
-                $next_match_number = ($current_match_number + 1) / 2;
+                $next_match_number = ($current_match_number % 2 === 0) ? $current_match_number / 2 : ($current_match_number + 1) / 2;
+                $this->matchForNextRound($tournament->id, $match->round_number + 1, $next_match_number, 'loser', $winningTeamId, $current_match_number);
             }
-            
-            $match_for_next_round = Matches::where([
-                ['tournament_id', '=', $tournament->id],
-                ['round_number', '=', $next_round_number],
-                ['match_number', '=', $next_match_number]
-            ])->first();
-    
-            //match for next round already exist
-            if ($match_for_next_round !== null) {
-                if ($match_for_next_round->team1_id === null) {
-                    $match_for_next_round->team1_id = $winningTeamId;
-                    $match_for_next_round->save();
-                }
-                if ($match_for_next_round->team2_id === null) {
-                    $match_for_next_round->team2_id = $winningTeamId;
-                    $match_for_next_round->save();
-                }
-            } else {
-                //create new match for next round
-                $match_new_for_next_round = Matches::create([
-                    'tournament_id' => $match->tournament_id,
-                    'round_number' => $next_round_number,
-                    'match_number' => $next_match_number,
-                    'team1_id' => null,
-                    'team2_id' => null
-                ]);
-                if ($current_match_number % 2 !== 0) {
-                    $match_new_for_next_round->team1_id = $winningTeamId;
-                    $match_new_for_next_round->save();
-                } else {
-                    $match_new_for_next_round->team2_id = $winningTeamId;
-                    $match_new_for_next_round->save();
-                }
+           
+        }
+
+
+        //handle team for winner bracket
+        if ($match->type_bracket == 'winner') {
+
+            //add loser team to next round
+            $loserTeamId = ($match->team1_id != $winningTeamId) ? $match->team1_id : $match->team2_id;
+            $current_match_number = $match->match_number;
+            if($match->round_number == 1){
+                $next_match_number = ($current_match_number % 2 === 0) ? $current_match_number / 2 : ($current_match_number + 1) / 2;
+            } else{
+                $next_match_number = ($tournament->team_number / 4) - ($match->match_number) + 1;
+            }
+            $this->matchForNextRound($tournament->id, $match->round_number, $next_match_number, 'loser', $loserTeamId, $current_match_number);
+
+            //add winner team to next round
+            $round = intval(log($tournament->team_number, 2));;
+            $teamWinner = Team::find($winningTeamId);
+            //neu round hien tai la round cuoi, add winner cho tournament
+            if ($match->round_number === $round) {
+                $tournament->winner_team = $teamWinner->team_name;
+                $tournament->save();
+            }
+            //neu ko thi add winner vao next round
+            else {
+                $current_match_number = $match->match_number;
+                $next_round_number = $match->round_number + 1;
+                $next_match_number = ($current_match_number % 2 === 0) ? $current_match_number / 2 : ($current_match_number + 1) / 2;
+                $this->matchForNextRound($tournament->id, $next_round_number, $next_match_number, 'winner', $winningTeamId, $current_match_number);
             }
         }
-       
 
         return back();
     }

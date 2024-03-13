@@ -107,6 +107,13 @@ class TeamController extends Controller
             'in_game.*' => 'required|string',
         ]);
 
+        //update team name
+        $team = Team::find($teamId);
+        if($team->team_name !== $request->input('team_name')){
+            $team->team_name = $request->input('team_name');
+            $team->save();
+        }
+
         $emailsRequest = $request->input('player_email');
         $in_game = $request->input('in_game');
         $checkedEmails = [];
@@ -138,9 +145,7 @@ class TeamController extends Controller
                 $players = Player::whereHas('user', function ($query) use ($email) {
                     $query->where('email', $email);
                 })->get()->first();
-                // dd($in_game);
                 $index = array_search($email, $emailsRequest);
-                // dd($index);
                 $players->in_game_name = $in_game[$index];
                 $players->save();
             }
@@ -165,7 +170,8 @@ class TeamController extends Controller
                     throw ValidationException::withMessages([
                         'email_invalid' => "User has $email already in other team"
                     ]);
-                } else if ($user) {
+                }
+                else if ($user) {
                     $index = array_search($email, $emailsRequest);
                     Player::whereHas('user', function ($query) use ($emailsNeedDelete, $indexDelete) {
                         $query->where('email', $emailsNeedDelete[$indexDelete]);

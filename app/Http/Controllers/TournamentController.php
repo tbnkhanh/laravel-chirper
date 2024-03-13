@@ -67,13 +67,25 @@ class TournamentController extends Controller
             ->where('tournament_id', $id)   
             ->get();
 
-        $matches = Matches::with(['team1', 'team2', 'winnerTeam'])
-        ->where('tournament_id', $id)
+        $matches_winner = Matches::with(['team1', 'team2', 'winnerTeam'])
+        ->where([
+            ['tournament_id', '=', $id],
+            ['type_bracket', '=', 'winner']
+        ])
+        ->orderBy('round_number')
+        ->orderBy('match_number')
+        ->get();
+
+        $matches_loser = Matches::with(['team1', 'team2', 'winnerTeam'])
+        ->where([
+            ['tournament_id', '=', $id],
+            ['type_bracket', '=', 'loser']
+        ])
         ->orderBy('round_number')
         ->orderBy('match_number')
         ->get();
         // dd($matches->toArray());
-        return view('tournament.detail', compact('tournament', 'teamsWithPlayers', 'matches'));
+        return view('tournament.detail', compact('tournament', 'teamsWithPlayers', 'matches_winner', 'matches_loser'));
     }
 
     /**

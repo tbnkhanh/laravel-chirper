@@ -16,6 +16,7 @@ class Matches extends Model
         'team1_id',
         'team2_id',
         'winner_team_id',
+        'type_bracket',
         'start_date',
         'end_date',
         'status',
