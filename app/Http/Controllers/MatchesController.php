@@ -120,7 +120,6 @@ class MatchesController extends Controller
             $match->save();
         }
         $tournament = Tournament::find($match->tournament_id);
-
         //number round of loser bracket
         $soMu = log($tournament->team_number, 2);
         $roundNumberLoser = ($soMu - 1) * 2;
