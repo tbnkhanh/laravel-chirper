@@ -58,7 +58,7 @@ class TournamentController extends Controller
         return redirect('/tournament/index');
     }
     /**
-     * Display the specified resource.
+     * Display the specified reso urce.
      */
     public function show($id)
     {
