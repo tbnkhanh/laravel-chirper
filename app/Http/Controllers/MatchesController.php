@@ -141,12 +141,22 @@ class MatchesController extends Controller
             //add loser team to next round
             $loserTeamId = ($match->team1_id != $winningTeamId) ? $match->team1_id : $match->team2_id;
             $current_match_number = $match->match_number;
+            $next_round_number = $match->round_number;
             if($match->round_number == 1){
                 $next_match_number = ($current_match_number % 2 === 0) ? $current_match_number / 2 : ($current_match_number + 1) / 2;
-            } else{
+            } else if($match->round_number == 2){
                 $next_match_number = ($tournament->team_number / 4) - ($match->match_number) + 1;
+            } else{
+                // 8 - 1 16 - 2 32 - 3 
+                $soMu = log($tournament->team_number, 2);
+                $soRound = 0;
+                for ($i = 1; $i <= $soMu - 1; $i++) {
+                    $soRound += 2;
+                }
+                $next_round_number = $soRound;
+                $next_match_number = $match->match_number;
             }
-            $this->matchForNextRound($tournament->id, $match->round_number, $next_match_number, 'loser', $loserTeamId, $current_match_number);
+            $this->matchForNextRound($tournament->id, $next_round_number, $next_match_number, 'loser', $loserTeamId, $current_match_number);
 
             //add winner team to next round
             $round = intval(log($tournament->team_number, 2));;
