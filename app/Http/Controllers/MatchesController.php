@@ -131,7 +131,7 @@ class MatchesController extends Controller
                 $next_match_number = ($current_match_number % 2 === 0) ? $current_match_number / 2 : ($current_match_number + 1) / 2;
                 $this->matchForNextRound($tournament->id, $match->round_number + 1, $next_match_number, 'loser', $winningTeamId, $current_match_number);
             }
-           
+              
         }
 
 
