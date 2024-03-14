@@ -89,6 +89,11 @@
     width: 1px;
     left: 11px;
   }
+  .match-lines .line.two.loser {
+    height: 175px;
+    width: 1px;
+    left: 11px;
+  }
   .match-lines.alt {
     left: -12px;
   }
@@ -114,6 +119,10 @@
   .column:nth-child(4) .match-lines .line.two {
     /* height: 262px; */
     height: 100px;
+  }
+  .column:nth-child(4) .match-lines .line.two.winner  {
+    height: 350px;
+    /* height: 100px; */
   }
   .column:nth-child(5) .match-lines .line.two {
     height: 349px;

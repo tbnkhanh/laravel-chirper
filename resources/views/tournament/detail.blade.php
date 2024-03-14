@@ -1,46 +1,12 @@
 <x-app-layout>
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         <h1 class="font-semibold text-xl text-gray-800 leading-tight" style="text-align: center">
             Welcome to the Tournament: {{ $tournament->tournament_name }}
         </h1>
-    </x-slot>
+    </x-slot> --}}
 
     <div class="py-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="max-width: 85rem">
-            <div style="text-align: center; font-size: 20px">
-                <b>Tournament Information</b>
-            </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <div class="card text-center mb-2">
-                        <div class="card-header">Tournament name: {{ $tournament->tournament_name }}</div>
-                        <div class="card-body">
-                            <div>
-                                <b class="card-title">Tournament Description:</b>
-                                <p class="card-text"> {{ $tournament->tournament_description }} </p>
-                            </div>
-                            <div class='mt-2'>
-                                <b class="card-title ">Game Played:</b>
-                                <p class="card-text">{{ $tournament->game_played }}</p>
-                            </div>
-                            <div class='mt-2'>
-                                <b class="card-title ">Team Size</b>
-                                <p class="card-text">{{ $tournament->team_size }}</p>
-                            </div>
-                            <div class='mt-2'>
-                                <b class="card-title ">Tournament Time:</b>
-                                <p class="card-text">Start: {{ $tournament->start_date }} - End:
-                                    {{ $tournament->end_date }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="py-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="max-width: 85rem">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="max-width: 170rem">
             <div style="text-align: center; font-size: 20px">
                 <b class="test">Tournament Bracket</b>
             </div>
@@ -64,7 +30,7 @@
                             @php
                                 $round = log($tournament->team_number, 2);
                             @endphp
-                            @for ($i = 1; $i <= $round; $i++)
+                            @for ($i = 1; $i <= $round + 2; $i++)
                                 <div class="column">
                                     @php
                                         $matchesInThisRound = collect([]);
@@ -114,10 +80,15 @@
                                                 </span>
                                             </div>
 
-                                            @if ($match->round_number != $round)
+                                            @if ($match->round_number < $round)
                                                 <div class="match-lines">
                                                     <div class="line one"></div>
-                                                    <div class="line two"></div>
+                                                    <div class="line two winner"></div>
+                                                </div>
+                                            @endif
+                                            @if ($match->round_number <= $round + 1)
+                                                <div class="match-lines">
+                                                    <div class="line one"></div>
                                                 </div>
                                             @endif
                                             <div class="match-lines alt">
@@ -146,7 +117,7 @@
                                                 @if ($i != $round)
                                                     <div class="match-lines">
                                                         <div class="line one"></div>
-                                                        <div class="line two"></div>
+                                                        <div class="line two winner"></div>
                                                     </div>
                                                 @endif
                                                 <div class="match-lines alt">
@@ -178,10 +149,7 @@
                             <div class="bracket">
                                 @php
                                     $soMu = log($tournament->team_number, 2);
-                                    $round = 0;
-                                    for ($i = 1; $i <= $soMu - 1; $i++) {
-                                        $round += 2;
-                                    }
+                                    $round = ($soMu - 1) * 2;
                                 @endphp
 
                                 @for ($current_round = 1; $current_round <= $round; $current_round++)
@@ -234,15 +202,15 @@
                                                     </span>
                                                 </div>
 
-                                                @if ($current_round % 2 !== 0 )
-                                                <div class="match-lines">
-                                                    <div class="line one"></div>
-                                                </div>
+                                                @if ($current_round % 2 !== 0)
+                                                    <div class="match-lines">
+                                                        <div class="line one"></div>
+                                                    </div>
                                                 @else
-                                                <div class="match-lines">
-                                                    <div class="line one"></div>
-                                                    <div class="line two"></div>    
-                                                </div>
+                                                    <div class="match-lines">
+                                                        <div class="line one"></div>
+                                                        <div class="line two loser"></div>
+                                                    </div>
                                                 @endif
                                                 <div class="match-lines alt">
                                                     <div class="line one"></div>
@@ -252,10 +220,11 @@
 
                                         {{-- Nếu số lượng match trong round ít hơn số lượng match yêu cầu, tạo ra các div rỗng --}}
                                         @php
-                                            $match_number_first = $tournament->team_number / 4;
+                                            $match_number_loser = $tournament->team_number / 4;
                                             $b = $current_round % 2 === 0 ? $current_round : $current_round + 1;
-                                            $match_number_loser = $match_number_first / ($b / 2);
-
+                                            for ($c = 1; $c <= $b / 2 - 1; $c++) {
+                                                $match_number_loser = $match_number_loser / 2;
+                                            }
                                         @endphp
                                         @if ($matchesInThisRound->count() < $match_number_loser)
                                             @for ($j = $matchesInThisRound->count() + 1; $j <= $match_number_loser; $j++)
@@ -271,15 +240,15 @@
                                                         <span class="winner"></span>
                                                     </div>
 
-                                                    @if ($current_round % 2 !== 0 )
-                                                    <div class="match-lines">
-                                                        <div class="line one"></div>
-                                                    </div>
+                                                    @if ($current_round % 2 !== 0)
+                                                        <div class="match-lines">
+                                                            <div class="line one"></div>
+                                                        </div>
                                                     @else
-                                                    <div class="match-lines">
-                                                        <div class="line one"></div>
-                                                        <div class="line two"></div>    
-                                                    </div>
+                                                        <div class="match-lines">
+                                                            <div class="line one"></div>
+                                                            <div class="line two loser"></div>
+                                                        </div>
                                                     @endif
 
                                                     <div class="match-lines alt">
@@ -298,6 +267,43 @@
                     </div>
                 </div>
             </div>
+
+
+
+            <div class="py-2">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="max-width: 85rem">
+                    <div style="text-align: center; font-size: 20px">
+                        <b>Tournament Information</b>
+                    </div>
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 text-gray-900">
+                            <div class="card text-center mb-2">
+                                <div class="card-header">Tournament name: {{ $tournament->tournament_name }}</div>
+                                <div class="card-body">
+                                    <div>
+                                        <b class="card-title">Tournament Description:</b>
+                                        <p class="card-text"> {{ $tournament->tournament_description }} </p>
+                                    </div>
+                                    <div class='mt-2'>
+                                        <b class="card-title ">Game Played:</b>
+                                        <p class="card-text">{{ $tournament->game_played }}</p>
+                                    </div>
+                                    <div class='mt-2'>
+                                        <b class="card-title ">Team Size</b>
+                                        <p class="card-text">{{ $tournament->team_size }}</p>
+                                    </div>
+                                    <div class='mt-2'>
+                                        <b class="card-title ">Tournament Time:</b>
+                                        <p class="card-text">Start: {{ $tournament->start_date }} - End:
+                                            {{ $tournament->end_date }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
 
             <div class="py-2">
